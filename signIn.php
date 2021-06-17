@@ -27,7 +27,7 @@
             <div class = "entrance-enter">
                 <span class = "title">會員登入</span>
                 <hr/>
-                <form method = "post">
+                <form method = "POST">
                     帳號：　<input type="text" autocomplete="off" name="id">
                     <br/>
                     密碼：　<input type="password"  autocomplete="off" name="password">

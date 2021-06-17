@@ -44,27 +44,60 @@
             $winStatistical[2] = $row["tie"];
             return $winStatistical;
         }
-        function get_table($table_id){
-            $sql="SELECT*FROM lobby where table_id = $table_id";
+        function get_table(){
+            $sql="SELECT*FROM lobby where player1 != ''";
             $result = mysqli_query($this->conn,$sql);
-            if($row = mysqli_fetch_assoc($result)){
-                $_SESSION["table_id"] = $row["table_id"];
-                $_SESSION["time"] = $row["time"];
-                $_SESSION["player1"] = $row["player1"];
-                $_SESSION["player2"] = $row["player2"];
-                $_SESSION["status"] = $row["status"];
+            for($i = 0;$i < 4;$i++){
+                if($row = mysqli_fetch_assoc($result)){
+                    echo"
+                        <form class = 'table' method = 'POST'>
+                            <br/>
+                            <button type='submit' class = 'table-button' value = '".$row["table_id"]."' name = 'join_table'>
+                                <br/>
+                                <table width = '500px' hight = '300px' cellpading = '800' class = 'table-table'>
+                                    <tr>
+                                        <td rowspan = '2' style = 'color:#0066CC'>桌號:".$row["table_id"]."</td>
+                                        <td style = 'color:#FFFFFF'>白方</td>
+                                        <td>黑方</td>
+                                        <td rowspan = '2' style = 'color:#0066CC'>遊玩中</td>
+                                    </tr>
+                                    <tr>
+                                        <td style = 'color:#FFFFFF'><br/>".$row["player1"]."</td>
+                                        <td><br/>".$row["player2"]."</td>
+                                    </tr>
+                                </table>
+                                <br/>
+                            </button>
+                        </form>";
+                }
             }
         }
-        function add_newtable(){
+        function join_newtable(){
             for($i = 1;$i <= 100;$i++){
-                $sql="SELECT*FROM lobby where table_id = $i";
+                $sql="SELECT player1 FROM lobby where table_id = $i";
                 $result = mysqli_query($this->conn,$sql);
-                if(mysqli_num_rows($result) == 0){
-                    $sql = "INSERT INTO lobby(table_id,time) VALUES($i,now())";
+                $row = mysqli_fetch_assoc($result);
+                if($row["player1"] == ""){
+                    $sql = "UPDATE lobby SET player1 = '".$_SESSION["id"]."' WHERE table_id = $i ";
                     mysqli_query($this->conn,$sql);
                     header("location:game.php");
                     exit;
                 }
+            }
+        }
+
+        function join_table($table_id){
+            $sql="SELECT player1,player2 FROM lobby where table_id = $table_id";
+            $result = mysqli_query($this->conn,$sql);
+            $row = mysqli_fetch_assoc($result);
+            echo $row["player1"];
+            echo $row["player2"];
+            if($row["player1"] != "" && $row["player2"] == ""){
+                echo "a";
+                $sql = "UPDATE lobby SET player2 = '".$_SESSION["id"]."' WHERE table_id = $table_id ";
+                mysqli_query($this->conn,$sql);
+                header("location:game.php");
+                exit;
             }
         }
     }

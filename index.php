@@ -12,6 +12,7 @@
         </style>
     </head>
     <body style = "background-color:#FFF8D7">
+    
         <?php
             include "class/database.php";
             $database = new database();
@@ -43,9 +44,15 @@
                 if($id != "?"){
                     header("Location:lobby.php"); 
                     exit;
-                }else{
-                    echo "請先登入";
-                }
+                }else{                
+                    echo "<script language='jscript'>
+                    function test()
+                    {
+                        alert('請先登入');
+                    }
+                    </script>";    
+                    echo "<script>test();</script> "; 
+                     }
             }
         ?>
         <div class = "center">
@@ -57,7 +64,7 @@
             <hr/>
             <form method = "POST">
                 <br/>
-                <input type="submit" value="開始遊玩" name = "start" class = "select">
+                <input type="submit" value="開始遊玩" name = "start"  class = "select">
             <form>
             </form>
                 <br/>

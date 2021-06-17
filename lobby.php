@@ -4,10 +4,13 @@
     include "class/database.php";
     $database = new database();
     $database->connect();
-    if(isset($_POST["create"])){
-        $database->add_newtable();                   
-    }
     session_start();
+    if(isset($_POST["join_new_table"])){
+        $database->join_newtable();                   
+    }
+    if(isset($_POST["join_table"])){
+        $database->join_table($_POST["join_table"]);
+    }
 ?>
     <head>
         <title>西洋棋-大廳</title>
@@ -29,44 +32,13 @@
             <div class = "left"></div>
             <div class = "center">
                 <?php
-                    for($i = 1;$i <= 3;$i++){
-                        $database->get_table($i);
-                        if(isset($_SESSION["table_id"])){
-                            if($_SESSION["table_id"] != 0){
-                                echo"
-                                    <form class = 'table'>
-                                        <br/>
-                                        <button type='submit' class = 'table-button'>
-                                            <br/>
-                                            <table width = '500px' hight = '300px' cellpading = '800' class = 'table-table'>
-                                                <tr>
-                                                    <td style ='color:#0066CC'>桌號:".$_SESSION["table_id"]."</td>
-                                                </tr>
-                                                <tr>
-                                                    <td rowspan = '2' style = 'color:#0066CC'>".$_SESSION["time"]."</td>
-                                                    <td style = 'color:#FFFFFF'>白方</td>
-                                                    <td>黑方</td>
-                                                    <td rowspan = '2' style = 'color:#0066CC'>遊玩中</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style = 'color:#FFFFFF'><br/>".$_SESSION["player1"]."</td>
-                                                    <td><br/>".$_SESSION["player2"]."</td>
-                                                </tr>
-                                            </table>
-                                            <br/>
-                                        </button>
-                                    </form>";
-                            $_SESSION["table_id"] = 0;
-                            }
-                        }  
-                    }
-                    
+                    $database->get_table();
                 ?>
             </div>
             <div class = "right">
                 <div class = "button">
                     <form method="POST" action="lobby.php">
-                        <input type="submit" value="開設新房" class = "newtable-button" name="create">
+                        <input type="submit" value="開設新房" class = "newtable-button" name="join_new_table">
                         <br/>
                         <br/>
                         <input type="button" value="上一頁" class = "other-button">
